@@ -1,0 +1,8 @@
+prob
+o/f=4,5,6,7,8,8.25,8.5,8.75,9,10 rocket equilibrium frozen nfz=1 tcest,k=3000 p,bar=10,20,30,40,50,60,70,80 sup,ae/at=20
+react 
+  fuel=C4H6,butadiene wt=100 t,k=298
+  oxid=N2O wt=100 t,k=298
+output  
+    plot o/f p t rho h g m mw cp gam mach ivac isp 
+end

@@ -1,0 +1,8 @@
+prob
+tp p,atm=.05 case=14 t,k=1000,500,350,305,304.3,304.2,304,300,
+react 
+  name=H2(L) moles=100 H 2
+  name=O2(L) moles=60 O 2
+output  
+     deb=5, siunits
+end
