@@ -1,0 +1,12 @@
+# put data in this format (line below)
+# name radius mass Thrust Isp dt
+#     where the input variables have the following type
+#     name      = string (start, coast, or final)
+#     radius    = real
+#     mass      = real 
+#     Thrust    = real
+#     Isp       = real
+#     dt        = real
+start 1200 8530000  10      2000    500   
+coast 1100 8530000  0       2000    500
+final 1000 13200000 2000    270     0.0001
