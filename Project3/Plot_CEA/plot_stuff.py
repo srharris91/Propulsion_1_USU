@@ -58,11 +58,11 @@ fig=plt.figure(figsize=(28,42))
 n=1
 ax1=fig.add_subplot(np.size(x1.dtype.names),3,1)
 for i in x1.dtype.names:
-    for j in range(1,4):
+    for j in range(0,3):
         ax1=fig.add_subplot(np.size(x1.dtype.names),3,n)
         n=n+1
         for k in range(2,3*PS,3):
-            ax1.plot(x1['of'][k::3*PS],x1[i][k::3*PS],'.-')
+            ax1.plot(x1['of'][j+k::3*PS],x1[i][j+k::3*PS],'.-')
         if (i == 'isp'): ax1.set_xlabel(r'$O/F$')
-        if (j == 1): ax1.set_ylabel(i)
+        if (j == 0): ax1.set_ylabel(i)
 fig.savefig('all.png',bbox_inches='tight')
