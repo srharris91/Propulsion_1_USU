@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import mlab,cm
 from scipy.integrate import quad
+import sys
 
 def get_data(filename):
 #    header=np.genfromtxt(filename,dtype=str)[0,:]
@@ -21,13 +22,22 @@ def plot_data(xlabel,x,ylabel,y,filename):
     #ax1.axis('equal')
     fig.savefig(filename,bbox_inches='tight') 
 
+# get argument list using sys module
+sys.argv
+filename1=''
+filename1= str(sys.argv[1])
+
+
 #user defined values
 # number of pressure values
 PS = 8
 
 #x1=get_data_dtypes('MAE5540_Nitrous_HTBN.plt')
 
-x1=get_data_dtypes('Part1_try1.plt')
+#filename1= raw_input('Enter a filename: ') or 'Part1_try1.plt'
+
+#x1=get_data_dtypes('Part1_try1.plt')
+x1=get_data_dtypes(filename1)
 #of  =x1['of']
 #p   =x1['p']
 #t   =x1['t']
