@@ -38,7 +38,11 @@ x1=get_data_dtypes(filename1)
 c_star = np.zeros(np.size(x1['gam']))
 j=0
 for i in x1['gam']:
-    c_star[j]=(np.sqrt(x1['gam'][j]*8.314*1000.)/(x1['gam'][j]*np.sqrt(2./(x1['gam'][j]+1)**((x1['gam'][j]+1.)/(x1['gam'][j]-1.))) ))*np.sqrt(x1['t'][j]/x1['mw'][j])
+    g=x1['gam'][j]
+    t=x1['t'][j]
+    mw=x1['mw'][j]
+    c_star[j]=(np.sqrt(g*8.314*1000.)/(g*np.sqrt(2./(g+1))**((g+1.)/(g-1.))) )*np.sqrt(t/mw)
+    if (x1['pip'][j]==1.7428 and x1['cf'][j]>=0.6613 and x1['cf'][j]<=0.6614 and x1['of'][j]==8.5 and x1['aeat'][j]==1.0 and x1['mach'][j]==1.0 and x1['pip'][j]!=1.0): print 'c_star = ',c_star[j],j
     j=j+1
 
 
