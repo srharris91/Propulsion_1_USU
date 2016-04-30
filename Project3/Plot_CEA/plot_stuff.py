@@ -36,12 +36,18 @@ x1=get_data_dtypes(filename1)
 
 # calculate C*
 c_star = np.zeros(np.size(x1['gam']))
+p0 = np.zeros(np.size(x1['gam']))
+t0 = np.zeros(np.size(x1['gam']))
 j=0
 for i in x1['gam']:
     g=x1['gam'][j]
+    p=x1['p'][j]
     t=x1['t'][j]
+    M=x1['mach'][j]
     mw=x1['mw'][j]
-    c_star[j]=(np.sqrt(g*8.314*1000.)/(g*np.sqrt(2./(g+1))**((g+1.)/(g-1.))) )*np.sqrt(t/mw)
+    t0[j]=t*(1+((g-1.)/2.)*M**2)
+    p0[j]=p*(1+((g-1.)/2.)*M**2)**(g/(g-1.))
+    c_star[j]=(np.sqrt(g*8.314*1000.)/(g*np.sqrt(2./(g+1))**((g+1.)/(g-1.))) )*np.sqrt(t0[j]/mw)
     if (x1['pip'][j]==1.7428 and x1['cf'][j]>=0.6613 and x1['cf'][j]<=0.6614 and x1['of'][j]==8.5 and x1['aeat'][j]==1.0 and x1['mach'][j]==1.0 and x1['pip'][j]!=1.0): print 'c_star = ',c_star[j],j
     j=j+1
 
@@ -55,10 +61,10 @@ for i in x1['gam']:
 # plot big plot
 fig=plt.figure(figsize=(24,72))
 n=1
-ax1=fig.add_subplot(np.size(x1.dtype.names)+1,W,1)
+ax1=fig.add_subplot(np.size(x1.dtype.names)+2,W,1)
 for i in x1.dtype.names:
     for j in range(0,W):
-        ax1=fig.add_subplot(np.size(x1.dtype.names)+1,W,n)
+        ax1=fig.add_subplot(np.size(x1.dtype.names)+2,W,n)
         n=n+1
         for k in range(0,W*PS-(W-1),W):
             ax1.plot(x1['of'][j+k::W*PS],x1[i][j+k::W*PS],'.-')
@@ -68,12 +74,20 @@ for i in x1.dtype.names:
 
 
 for j in range(0,W):
-    ax1=fig.add_subplot(np.size(x1.dtype.names)+1,W,n)
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+2,W,n)
     n=n+1
     for k in range(0,W*PS-2,W):
         ax1.plot(x1['of'][j+k::W*PS],c_star[j+k::W*PS],'.-')
-    ax1.set_xlabel(r'$O/F$')
+    #ax1.set_xlabel(r'$O/F$')
     if (j == 0): ax1.set_ylabel('c*')
+
+for j in range(0,W):
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+2,W,n)
+    n=n+1
+    for k in range(0,W*PS-2,W):
+        ax1.plot(x1['of'][j+k::W*PS],t0[j+k::W*PS],'.-')
+    ax1.set_xlabel(r'$O/F$')
+    if (j == 0): ax1.set_ylabel('t0')
 
 
 
