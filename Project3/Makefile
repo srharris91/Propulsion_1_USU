@@ -4,4 +4,4 @@ all:
 	cp CEAexec/$(VAR).plt Plot_CEA/
 	cd Plot_CEA; make
 	rm Plot_CEA/$(VAR).plt
-	vi CEAexec/$(VAR).out
+	#vi CEAexec/$(VAR).out

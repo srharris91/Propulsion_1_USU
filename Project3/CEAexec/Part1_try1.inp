@@ -1,10 +1,10 @@
-problem    o/f=4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,40,80,99,
-    rocket  equilibrium  frozen  nfz=1  tcest,k=3000
-  p,bar=1.6,1.7,1.75,1.8,1.81,1.85,1.9,20.0,
-  sup,ae/at=3.75,
+problem    o/f=4,5,6,7,8,9,10,20,30,50,70,90,99,
+    rocket  equilibrium  frozen  nfz=1  tcest,k=3800
+  p,bar=25,26,27,28,29,30,31,32,
+  sup,ae/at=4,
 react  
-  oxid=H2O2 wt=100  t,k=298  
-  fuel=H2O wt=100  t,k=298  
-output  
-    plot o/f p t rho h g m mw cp gam pip mach cf ivac isp 
+  fuel=H2O(L) wt=100  t,k=298  
+  oxid=H2O2(L) wt=100  t,k=298  
+output  transport 
+    plot o/f %f p t rho h g m mw cp gam pip mach aeat cf ivac isp  
 end

@@ -1,0 +1,9 @@
+problem o/f=4,5,6,7,8,8.5,9
+    rocket equilibrium
+  p,bar=30,31,32,33,34,35,36,37 
+react
+    fuel=C4H6,butadiene wt=100
+    oxid=N2O wt=100
+output  transport 
+    plot o/f %f p t rho h g m mw cp gam pip mach aeat cf ivac isp  
+end

@@ -24,45 +24,55 @@ def plot_data(xlabel,x,ylabel,y,filename):
 
 # get argument list using sys module
 sys.argv
-filename1=''
 filename1= str(sys.argv[1])
 
 
 #user defined values
 # number of pressure values
 PS = 8
+W=2
 
-#x1=get_data_dtypes('MAE5540_Nitrous_HTBN.plt')
-
-#filename1= raw_input('Enter a filename: ') or 'Part1_try1.plt'
-
-#x1=get_data_dtypes('Part1_try1.plt')
 x1=get_data_dtypes(filename1)
-#of  =x1['of']
-#p   =x1['p']
-#t   =x1['t']
-#rho =x1['rho']
-#h   =x1['h']
-#g   =x1['g']
-#m   =x1['m']
-#mw  =x1['mw']
-#cp  =x1['cp']
-#gam =x1['gam']
-#pip =x1['pip']
-#mach=x1['mach']
-#cf  =x1['cf']
-#ivac=x1['ivac']
-#isp =x1['isp']
 
-fig=plt.figure(figsize=(28,42))
+# calculate C*
+c_star = np.zeros(np.size(x1['gam']))
+j=0
+for i in x1['gam']:
+    c_star[j]=(np.sqrt(x1['gam'][j]*8.314*1000.)/(x1['gam'][j]*np.sqrt(2./(x1['gam'][j]+1)**((x1['gam'][j]+1.)/(x1['gam'][j]-1.))) ))*np.sqrt(x1['t'][j]/x1['mw'][j])
+    j=j+1
+
+
+
+#print c_star
+
+
+
+
+# plot big plot
+fig=plt.figure(figsize=(24,72))
 n=1
-ax1=fig.add_subplot(np.size(x1.dtype.names),3,1)
+ax1=fig.add_subplot(np.size(x1.dtype.names)+1,W,1)
 for i in x1.dtype.names:
-    for j in range(0,3):
-        ax1=fig.add_subplot(np.size(x1.dtype.names),3,n)
+    for j in range(0,W):
+        ax1=fig.add_subplot(np.size(x1.dtype.names)+1,W,n)
         n=n+1
-        for k in range(2,3*PS,3):
-            ax1.plot(x1['of'][j+k::3*PS],x1[i][j+k::3*PS],'.-')
-        if (i == 'isp'): ax1.set_xlabel(r'$O/F$')
+        for k in range(0,W*PS-(W-1),W):
+            ax1.plot(x1['of'][j+k::W*PS],x1[i][j+k::W*PS],'.-')
+        #if (i == 'isp'): ax1.set_xlabel(r'$O/F$')
         if (j == 0): ax1.set_ylabel(i)
+
+
+
+for j in range(0,W):
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+1,W,n)
+    n=n+1
+    for k in range(0,W*PS-2,W):
+        ax1.plot(x1['of'][j+k::W*PS],c_star[j+k::W*PS],'.-')
+    ax1.set_xlabel(r'$O/F$')
+    if (j == 0): ax1.set_ylabel('c*')
+
+
+
+
+
 fig.savefig('all.png',bbox_inches='tight')
