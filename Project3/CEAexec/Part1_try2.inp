@@ -1,0 +1,14 @@
+      
+     prob           
+o/f=4,5,6,7,8,9 rocket equilibrium frozen nfz=1 tcest,k=3800                                                            
+p,bar=1,10,20,30,40,50,60,70                                                                                            
+sup,ae/at=4                                                                                                             
+      
+     reac           
+oxid=H2O2(L) wt=100 t,k=298                                                                                             
+fuel=H2O(L) wt=100 t,k=298                                                                                              
+      
+     outp           
+siunits plot p t rho h m mw cp gam pip mach aeat cf ivac isp o/f                                                        
+      
+     end            

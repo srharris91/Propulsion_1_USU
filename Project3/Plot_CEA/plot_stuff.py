@@ -68,66 +68,67 @@ for i in x1['gam']:
 
 
 
-#  # plot big plot
-#  fig=plt.figure(figsize=(24,72))
-#  n=1
-#  ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,1)
-#  for i in x1.dtype.names:
-#      for j in range(0,W):
-#          ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
-#          n=n+1
-#          for k in range(0,W*PS-(W-1),W):
-#              ax1.plot(x1['of'][j+k::W*PS],x1[i][j+k::W*PS],'.-')
-#          #if (i == 'isp'): ax1.set_xlabel(r'$O/F$')
-#          if (j == 0): ax1.set_ylabel(i)
-#  
-#  
-#  
-#  # c*
-#  for j in range(0,W):
-#      ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
-#      n=n+1
-#      for k in range(0,W*PS-2,W):
-#          ax1.plot(x1['of'][j+k::W*PS],c_star[j+k::W*PS],'.-')
-#      #ax1.set_xlabel(r'$O/F$')
-#      if (j == 0): ax1.set_ylabel('c*')
-#  
-#  # t0
-#  for j in range(0,W):
-#      ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
-#      n=n+1
-#      for k in range(0,W*PS-2,W):
-#          ax1.plot(x1['of'][j+k::W*PS],t0[j+k::W*PS],'.-')
-#      ax1.set_xlabel(r'$O/F$')
-#      if (j == 0): ax1.set_ylabel('t0')
-#  
-#  # a_throat
-#  for j in range(0,W):
-#      ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
-#      n=n+1
-#      for k in range(0,W*PS-2,W):
-#          ax1.plot(x1['of'][j+k::W*PS],at[j+k::W*PS],'.-')
-#      ax1.set_xlabel(r'$O/F$')
-#      if (j == 0): ax1.set_ylabel('at')
-#  
-#  # P0*a_throat
-#  for j in range(0,W):
-#      ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
-#      n=n+1
-#      for k in range(0,W*PS-2,W):
-#          ax1.plot(x1['of'][j+k::W*PS],p0_at[j+k::W*PS],'.-')
-#      ax1.set_xlabel(r'$O/F$')
-#      if (j == 0): ax1.set_ylabel('p0 at')
-#  
-#  # m_dot
-#  for j in range(0,W):
-#      ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
-#      n=n+1
-#      for k in range(0,W*PS-2,W):
-#          ax1.plot(x1['of'][j+k::W*PS],mdot[j+k::W*PS],'.-')
-#      ax1.set_xlabel(r'$O/F$')
-#      if (j == 0): ax1.set_ylabel(r'$\dot{m}$')
+# plot big plot
+fig=plt.figure(figsize=(24,72))
+n=1
+ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,1)
+for i in x1.dtype.names:
+    for j in range(0,W):
+        ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
+        n=n+1
+        for k in range(0,W*PS-(W-1),W):
+            ax1.plot(x1['of'][j+k::W*PS],x1[i][j+k::W*PS],'.-')
+        #if (i == 'isp'): ax1.set_xlabel(r'$O/F$')
+        if (j == 0): ax1.set_ylabel(i)
 
+
+
+# c*
+for j in range(0,W):
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
+    n=n+1
+    for k in range(0,W*PS-2,W):
+        ax1.plot(x1['of'][j+k::W*PS],c_star[j+k::W*PS],'.-')
+    #ax1.set_xlabel(r'$O/F$')
+    if (j == 0): ax1.set_ylabel('c*')
+
+# t0
+for j in range(0,W):
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
+    n=n+1
+    for k in range(0,W*PS-2,W):
+        ax1.plot(x1['of'][j+k::W*PS],t0[j+k::W*PS],'.-')
+    ax1.set_xlabel(r'$O/F$')
+    if (j == 0): ax1.set_ylabel('t0')
+
+# a_throat
+for j in range(0,W):
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
+    n=n+1
+    for k in range(0,W*PS-2,W):
+        ax1.plot(x1['of'][j+k::W*PS],at[j+k::W*PS],'.-')
+    ax1.set_xlabel(r'$O/F$')
+    if (j == 0): ax1.set_ylabel('at')
+
+# P0*a_throat
+for j in range(0,W):
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
+    n=n+1
+    for k in range(0,W*PS-2,W):
+        ax1.plot(x1['of'][j+k::W*PS],p0_at[j+k::W*PS],'.-')
+    ax1.set_xlabel(r'$O/F$')
+    if (j == 0): ax1.set_ylabel('p0 at')
+
+# m_dot
+for j in range(0,W):
+    ax1=fig.add_subplot(np.size(x1.dtype.names)+5,W,n)
+    n=n+1
+    for k in range(0,W*PS-2,W):
+        ax1.plot(x1['of'][j+k::W*PS],mdot[j+k::W*PS],'.-')
+    ax1.set_xlabel(r'$O/F$')
+    if (j == 0): ax1.set_ylabel(r'$\dot{m}$')
+
+fig.savefig('all.png',bbox_inches='tight')
 
 # output file
 f=open('output.txt','w')
@@ -159,4 +160,3 @@ f.close()
 
 
 
-#fig.savefig('all.png',bbox_inches='tight')
