@@ -1,7 +1,6 @@
 Peroxide concentration requires a 5:1 Oxide to fuel ratio to vaporize all water
 90% H2O2 and optimal pressure gives:
   at =        0.000807083035601
-  isp=        1351.5
+  isp=        137.823781358
   isp_opt=    137.699990655
   mdot=       2.28586037785
-

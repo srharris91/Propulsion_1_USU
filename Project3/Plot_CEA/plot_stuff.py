@@ -19,6 +19,8 @@ def calcs(thrust):
     for i in range(0,np.size(x1['gam'])):
         g=x1['gam'][i]
         x1['p'][i]=x1['p'][i]*100000. # convert bar to Pa
+        x1['isp'][i]=x1['isp'][i]/9.806 # convert European Isp to American Isp
+        x1['ivac'][i]=x1['ivac'][i]/9.806 # convert European Isp to American Isp
         p=x1['p'][i]
         t=x1['t'][i]
         M=x1['mach'][i]
@@ -121,7 +123,7 @@ def big():# plot big plot
         ax1.set_xlabel(r'$\%\ H_2O_2$')
         if (j == 0): ax1.set_ylabel(r'$\dot{m}$')
 
-    fig.savefig('all.png',bbox_inches='tight')
+    fig.savefig('all.pdf',bbox_inches='tight')
 
 def Part1_plots(): # Part 1 specific plots desired i
     fig=plt.figure(figsize=(3,4))
@@ -132,7 +134,7 @@ def Part1_plots(): # Part 1 specific plots desired i
     ax1.set_xlabel(r'$\%\ H_2O_2$')
     ax1.set_ylabel(r'$T\ (K)$')
     ax1.legend(numpoints=1,loc='upper center',bbox_to_anchor=(0.5,1.3))
-    fig.savefig('Part1_i.png',bbox_inches='tight')
+    fig.savefig('Part1_i.pdf',bbox_inches='tight')
 
     # Part 1 specific plots desired ii
     fig=plt.figure(figsize=(3,4))
@@ -143,7 +145,7 @@ def Part1_plots(): # Part 1 specific plots desired i
     ax1.set_xlabel(r'$\%\ H_2O_2$')
     ax1.set_ylabel(r'$T\ (K)$')
     ax1.legend(numpoints=1,loc='upper center',bbox_to_anchor=(0.5,1.3))
-    fig.savefig('Part1_ii.png',bbox_inches='tight')
+    fig.savefig('Part1_ii.pdf',bbox_inches='tight')
 
     # Part 1 specific plots desired iii
     fig=plt.figure(figsize=(3,4))
@@ -153,7 +155,7 @@ def Part1_plots(): # Part 1 specific plots desired i
     ax1.set_xlabel(r'$\%\ H_2O_2$')
     ax1.set_ylabel(r'$Ma$')
     #ax1.legend(numpoints=1,loc='upper center',bbox_to_anchor=(0.5,1.2))
-    fig.savefig('Part1_iii.png',bbox_inches='tight')
+    fig.savefig('Part1_iii.pdf',bbox_inches='tight')
 
     # Part 1 specific plots desired iv
     fig=plt.figure(figsize=(3,8))
@@ -169,7 +171,7 @@ def Part1_plots(): # Part 1 specific plots desired i
     ax1.set_xlabel(r'$\%\ H_2O_2$')
     ax1.set_ylabel(r'$C_F$')
     #ax1.legend(numpoints=1,loc='upper center')
-    fig.savefig('Part1_iv.png',bbox_inches='tight')
+    fig.savefig('Part1_iv.pdf',bbox_inches='tight')
 
     # Part 1 specific plots desired v
     fig=plt.figure(figsize=(3,4))
@@ -181,7 +183,7 @@ def Part1_plots(): # Part 1 specific plots desired i
     ax1.set_xlabel(r'$\%\ H_2O_2$')
     ax1.set_ylabel(r'$I_{sp}\ (s)$')
     ax1.legend(numpoints=1,loc='upper center',bbox_to_anchor=(0.5,1.425))
-    fig.savefig('Part1_v.png',bbox_inches='tight')
+    fig.savefig('Part1_v.pdf',bbox_inches='tight')
 
     # Part 1 specific peroxide concentration required?
     print "Peroxide concentration requires a 5:1 Oxide to fuel ratio to vaporize all water"
@@ -207,7 +209,7 @@ def Part1_plots(): # Part 1 specific plots desired i
         ax1.plot(100-x1['f'][W-1+k::W*PS],mdot[W-1+k::W*PS],'.-')
     ax1.set_xlabel(r'$\%\ H_2O_2$')
     ax1.set_ylabel(r'$\dot{m}\ \frac{kg}{s}$')
-    fig.savefig('Part1_vi.png',bbox_inches='tight')
+    fig.savefig('Part1_vi.pdf',bbox_inches='tight')
 
 def output_file():# output file
     f=open('output.txt','w')
@@ -354,47 +356,65 @@ def Part2_iter(): #  Part 2
     ax1.set_xlabel(r'$\%\ ABS$')
     ax1.set_ylabel(r'$P\ (Pa)$')
     ax1.legend(numpoints=1,loc='best')
-    fig.savefig('Part2_p.png',bbox_inches='tight')
+    fig.savefig('Part2_p.pdf',bbox_inches='tight')
     output_file()
 
 def Part2(): #  Part 2, combined files
     # get all txt files
+    W=3
+    PS=8
     s= np.sort(glob.glob("./Part2/*/*.txt"))
     max_values=np.zeros(np.size(s))
     loc_of=np.zeros(np.size(s))
     loc_isp_opt=np.zeros(np.size(s))
+    #loc_isp=np.zeros(np.size(s))
+    fig = plt.figure(figsize=(3,3))
+    fig2 = plt.figure(figsize=(3,3))
+    ax1=fig.add_subplot(111)
+    ax2=fig2.add_subplot(111)
     for f in range(0,np.size(s)):
         filename=s[f]
         x_data=get_data_dtypes(filename)
-        max_values[f] = np.max(x_data['c_star'][2::2])
+        max_values[f] = np.max(x_data['c_star'][2::3])
         for i in range(0,np.size(x_data['c_star'])):
-            if x_data['c_star'][i] == max_values[f]:
+            if (x_data['c_star'][i] == max_values[f] and x_data['isp'][i] !=0):
                 loc_of[f]=x_data['of'][i]
                 loc_isp_opt[f]=x_data['isp_opt'][i]
-                #print filename,max_values[f],loc_of[f],loc_isp_opt[f]
+        for k in range(0,W*PS-(W-1),W):
+            ax1.plot(100-x_data['f'][W-1+k::W*PS],x_data['isp_opt'][W-1+k::W*PS],'.-',label=filename if k==0 else '')
+            ax2.plot(100-x_data['f'][W-1+k::W*PS],x_data['c_star'][W-1+k::W*PS],'.-',label=filename if k==0 else '')
+    ax1.set_xlabel('O/F')
+    ax2.set_xlabel('O/F')
+    ax1.set_ylabel('$I_{sp}$')
+    ax2.set_ylabel('$C*$')
+    ax1.legend(numpoints=1,loc='best')
+    ax2.legend(numpoints=1,loc='best')
+    fig.savefig('Part2_Isps.pdf',bbox_inches='tight')
+    fig2.savefig('Part2_C_stars.pdf',bbox_inches='tight')
     # c*
-    fig = plt.figure()
+    fig = plt.figure(figsize=(3,3))
     ax1=fig.add_subplot(111)
     ax1.plot(np.array([80,85,90,95,99]),max_values,'o-')
     ax1.set_xlabel('Peroxide Mass fraction')
     ax1.set_ylabel('C*')
-    fig.savefig('Part2_C_stars.png',bbox_inches='tight')
+    fig.savefig('Part2_C_star.pdf',bbox_inches='tight')
 
     # O/F
-    fig = plt.figure()
+    fig = plt.figure(figsize=(3,3))
     ax1=fig.add_subplot(111)
     ax1.plot(np.array([80,85,90,95,99]),loc_of,'o-')
     ax1.set_xlabel('Peroxide Mass fraction')
     ax1.set_ylabel('O/F')
-    fig.savefig('Part2_OF.png',bbox_inches='tight')
+    fig.savefig('Part2_OF.pdf',bbox_inches='tight')
     
-    # O/F
-    fig = plt.figure()
+    # Isp
+    fig = plt.figure(figsize=(3,3))
     ax1=fig.add_subplot(111)
-    ax1.plot(np.array([80,85,90,95]),loc_isp_opt[:-1:],'o-')
+    ax1.plot(np.array([80,85,90,95,99]),loc_isp_opt[:],'o-')
+    #ax1.plot(np.array([80,85,90,95]),loc_isp[:-1:],'o-')
     ax1.set_xlabel('Peroxide Mass fraction')
     ax1.set_ylabel('Optimal $I_{sp}$')
-    fig.savefig('Part2_OptimalIsp.png',bbox_inches='tight')
+    fig.savefig('Part2_OptimalIsp.pdf',bbox_inches='tight')
 
 def Part3(): #  Part 2, combined files
     # get all txt files
@@ -406,28 +426,20 @@ def Part3(): #  Part 2, combined files
     for f in range(0,np.size(s)):
         filename=s[f]
         x_data=get_data_dtypes(filename)
-        max_values[f] = np.max(x_data['c_star'][2::2])
+        max_values[f] = np.max(x_data['c_star'][2::3])
         for i in range(0,np.size(x_data['c_star'])):
-            if x_data['c_star'][i] == max_values[f]:
+            if (x_data['c_star'][i] == max_values[f] and x_data['isp'][i]!=0):
                 loc_of[f]=x_data['of'][i]
                 loc_isp_opt[f]=x_data['isp_opt'][i]
                 loc_isp[f]=x_data['isp'][i]
 
     # ratio of Isp/Isp (hybrid/monopropollent)
-    fig = plt.figure()
+    fig = plt.figure(figsize=(3,3))
     ax1=fig.add_subplot(111)
-    ax1.plot(np.array([80,85,90,95]),(loc_isp_opt[:-1])/137.69999,'o-')
+    ax1.plot(np.array([80,85,90,95,99]),(loc_isp_opt[:])/137.69999,'o-')
     ax1.set_xlabel('Peroxide Mass fraction')
     ax1.set_ylabel(r'$\frac{t_2}{t_1}$')
-    fig.savefig('Part3.png',bbox_inches='tight')
-
-    # ratio of Isp/Isp (hybrid/monopropollent) using CEA values
-    fig = plt.figure()
-    ax1=fig.add_subplot(111)
-    ax1.plot(np.array([80,85,90,95]),(loc_isp[:-1])/1351.5,'o-')
-    ax1.set_xlabel('Peroxide Mass fraction')
-    ax1.set_ylabel(r'$\frac{t_2}{t_1}$')
-    fig.savefig('Part3_2.png',bbox_inches='tight')
+    fig.savefig('Part3.pdf',bbox_inches='tight')
 
 
 
@@ -446,10 +458,10 @@ def main():
 
     # part 2 stuff
     #Part2_iter()
-    #Part2()
+    Part2()
 
     # part 3 stuff
-    Part3()
+    #Part3()
 
 if __name__ == '__main__':
     main()

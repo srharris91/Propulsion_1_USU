@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}INTRODUCTION}{3}{section.1}
+\contentsline {subsection}{\numberline {1.1}Part 1}{3}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Part 2}{3}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Part 3}{3}{subsection.1.3}
+\contentsline {section}{\numberline {2}RESULTS}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Part 1}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Part 2}{5}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Part 3}{6}{subsection.2.3}
+\contentsline {section}{\numberline {3}CONCLUSION}{8}{section.3}
+\contentsline {section}{\numberline {A}Appendix A: Plotting Code}{8}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}Part 1 configuration file}{8}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}Part 2 configuration file}{8}{subsection.A.2}
+\contentsline {subsection}{\numberline {A.3}Plotting python script}{8}{subsection.A.3}
