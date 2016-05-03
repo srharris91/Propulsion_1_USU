@@ -1,2 +1,6 @@
+file=../input.txt
+VAR=`cat ${file}`
 all:
-	@python plot_stuff.py `cat ../input.txt`.plt
+	@cp ../CEAexec/$(VAR).plt ./
+	@python plot_stuff.py `cat ${file}`.plt
+	@rm $(VAR).plt

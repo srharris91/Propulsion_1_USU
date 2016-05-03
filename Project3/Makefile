@@ -1,7 +1,7 @@
 VAR=`cat input.txt`
-all:
+all: CEA plot
+
+CEA:
 	@cd CEAexec; ./FCEA2 < ../input.txt
-	@cp CEAexec/$(VAR).plt Plot_CEA/
+plot:
 	@cd Plot_CEA; make
-	@rm Plot_CEA/$(VAR).plt
-	#vi CEAexec/$(VAR).out
