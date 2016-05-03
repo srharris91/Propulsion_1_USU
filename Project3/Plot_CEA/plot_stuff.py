@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from matplotlib import mlab,cm
 from scipy.integrate import quad
 import sys
+import glob
+import os
 
 def get_data(filename):
 #    header=np.genfromtxt(filename,dtype=str)[0,:]
@@ -40,7 +42,7 @@ def calcs(thrust):
                         )*np.sqrt(
                             1-(p/p0[i])**((g-1)/g))
                     +
-                    x1['aeat'][i]*(p-1.01325)/p0[i]
+                    x1['aeat'][i]*(p-101325.)/p0[i]
                     ))
 
 def big():# plot big plot
@@ -216,6 +218,7 @@ def output_file():# output file
     f.write('isp_opt ')
     f.write('t0 ')
     f.write('p0 ')
+    f.write('c_star ')
     f.write('at ')
     f.write('p0at ')
     f.write('m_dot \n')
@@ -230,6 +233,8 @@ def output_file():# output file
         f.write(str(t0[i]))
         f.write(' ')
         f.write(str(p0[i]))
+        f.write(' ')
+        f.write(str(c_star[i]))
         f.write(' ')
         f.write(str(at[i]))
         f.write(' ')
@@ -309,27 +314,142 @@ def Part1(): #  Part 1
     isp_opt = np.zeros(np.size(x1['gam']))
 
     calcs(3114.)
-    #big()
-    #Part1_plots()
+    big()
+    Part1_plots()
     output_file()
 
-def Part2(): #  Part 1
-    return 0
+def Part2_iter(): #  Part 2
+    global PS
+    global W
+    PS=8
+    W=3
+    # get argument list using sys module
+    global x1
+    x1=get_data_dtypes(filename1)
+
+    # subroutines for part 1
+    # initialize values
+    global c_star
+    global p0    
+    global p0_at
+    global t0  
+    global at 
+    global mdot
+    global isp_opt
+
+    c_star  = np.zeros(np.size(x1['gam']))
+    p0      = np.zeros(np.size(x1['gam']))
+    p0_at   = np.zeros(np.size(x1['gam']))
+    t0      = np.zeros(np.size(x1['gam']))
+    at      = np.zeros(np.size(x1['gam']))
+    mdot    = np.zeros(np.size(x1['gam']))
+    isp_opt = np.zeros(np.size(x1['gam']))
+
+    calcs(3114.)
+    # Part 2 specific plots for iteratin
+    fig=plt.figure(figsize=(3,4))
+    ax1=fig.add_subplot(111)
+    for k in range(0,W*PS-(W-1),W):
+        ax1.plot(100-x1['f'][W-1+k::W*PS],x1['p'][W-1+k::W*PS],'.-',label=k)
+    ax1.set_xlabel(r'$\%\ ABS$')
+    ax1.set_ylabel(r'$P\ (Pa)$')
+    ax1.legend(numpoints=1,loc='best')
+    fig.savefig('Part2_p.png',bbox_inches='tight')
+    output_file()
+
+def Part2(): #  Part 2, combined files
+    # get all txt files
+    s= np.sort(glob.glob("./Part2/*/*.txt"))
+    max_values=np.zeros(np.size(s))
+    loc_of=np.zeros(np.size(s))
+    loc_isp_opt=np.zeros(np.size(s))
+    for f in range(0,np.size(s)):
+        filename=s[f]
+        x_data=get_data_dtypes(filename)
+        max_values[f] = np.max(x_data['c_star'][2::2])
+        for i in range(0,np.size(x_data['c_star'])):
+            if x_data['c_star'][i] == max_values[f]:
+                loc_of[f]=x_data['of'][i]
+                loc_isp_opt[f]=x_data['isp_opt'][i]
+                #print filename,max_values[f],loc_of[f],loc_isp_opt[f]
+    # c*
+    fig = plt.figure()
+    ax1=fig.add_subplot(111)
+    ax1.plot(np.array([80,85,90,95,99]),max_values,'o-')
+    ax1.set_xlabel('Peroxide Mass fraction')
+    ax1.set_ylabel('C*')
+    fig.savefig('Part2_C_stars.png',bbox_inches='tight')
+
+    # O/F
+    fig = plt.figure()
+    ax1=fig.add_subplot(111)
+    ax1.plot(np.array([80,85,90,95,99]),loc_of,'o-')
+    ax1.set_xlabel('Peroxide Mass fraction')
+    ax1.set_ylabel('O/F')
+    fig.savefig('Part2_OF.png',bbox_inches='tight')
+    
+    # O/F
+    fig = plt.figure()
+    ax1=fig.add_subplot(111)
+    ax1.plot(np.array([80,85,90,95]),loc_isp_opt[:-1:],'o-')
+    ax1.set_xlabel('Peroxide Mass fraction')
+    ax1.set_ylabel('Optimal $I_{sp}$')
+    fig.savefig('Part2_OptimalIsp.png',bbox_inches='tight')
+
+def Part3(): #  Part 2, combined files
+    # get all txt files
+    s= np.sort(glob.glob("./Part2/*/*.txt"))
+    max_values=np.zeros(np.size(s))
+    loc_of=np.zeros(np.size(s))
+    loc_isp_opt=np.zeros(np.size(s))
+    loc_isp=np.zeros(np.size(s))
+    for f in range(0,np.size(s)):
+        filename=s[f]
+        x_data=get_data_dtypes(filename)
+        max_values[f] = np.max(x_data['c_star'][2::2])
+        for i in range(0,np.size(x_data['c_star'])):
+            if x_data['c_star'][i] == max_values[f]:
+                loc_of[f]=x_data['of'][i]
+                loc_isp_opt[f]=x_data['isp_opt'][i]
+                loc_isp[f]=x_data['isp'][i]
+
+    # ratio of Isp/Isp (hybrid/monopropollent)
+    fig = plt.figure()
+    ax1=fig.add_subplot(111)
+    ax1.plot(np.array([80,85,90,95]),(loc_isp_opt[:-1])/137.69999,'o-')
+    ax1.set_xlabel('Peroxide Mass fraction')
+    ax1.set_ylabel(r'$\frac{t_2}{t_1}$')
+    fig.savefig('Part3.png',bbox_inches='tight')
+
+    # ratio of Isp/Isp (hybrid/monopropollent) using CEA values
+    fig = plt.figure()
+    ax1=fig.add_subplot(111)
+    ax1.plot(np.array([80,85,90,95]),(loc_isp[:-1])/1351.5,'o-')
+    ax1.set_xlabel('Peroxide Mass fraction')
+    ax1.set_ylabel(r'$\frac{t_2}{t_1}$')
+    fig.savefig('Part3_2.png',bbox_inches='tight')
+
+
+
 
 def main():
     #user defined values
     #sys.argv
     global filename1
     filename1 = str(sys.argv[1])
-    # number of pressure values
-    #PS = 8
-    #W=2
 
     # example stuff
     #example()
 
     # Part 1 stuff
-    Part1()
+    #Part1()
+
+    # part 2 stuff
+    #Part2_iter()
+    #Part2()
+
+    # part 3 stuff
+    Part3()
 
 if __name__ == '__main__':
     main()
